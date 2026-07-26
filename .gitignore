@@ -1,0 +1,24 @@
+# Local environment — never commit real credentials.
+.env
+.env.local
+.env.*.local
+
+# Local Docker Compose overrides (e.g. host port) — template is *.dist.
+docker-compose.override.yml
+
+# Composer dependencies.
+/vendor/
+
+# Runtime state (order store, logs).
+/var/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db

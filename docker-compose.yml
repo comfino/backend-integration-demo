@@ -1,0 +1,32 @@
+name: comfino-backend-integration-demo
+
+services:
+    comfino-backend-php:
+        build:
+            context: ./
+            dockerfile: config/docker/php/Dockerfile
+        expose:
+            - 9000
+        tty: true
+        env_file:
+            - .env
+        volumes:
+            - ./:/var/www/backend-integration-demo.test
+            - ~/.composer:/home/comfino/.composer
+
+    comfino-backend-nginx:
+        build:
+            context: ./
+            dockerfile: config/docker/nginx/Dockerfile
+        hostname: backend-integration-demo
+        ports:
+            # Default host port 8080. Override locally via docker-compose.override.yml
+            # (copy docker-compose.override.yml.dist) — no need to edit this file.
+            - "8080:80"
+        tty: true
+        depends_on:
+            - comfino-backend-php
+        links:
+            - comfino-backend-php
+        volumes:
+            - ./:/var/www/backend-integration-demo.test
