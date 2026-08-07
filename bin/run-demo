@@ -1,0 +1,26 @@
+#!/bin/bash
+#
+# Build and start the demo containers, then install Composer dependencies inside the
+# PHP container on first run. Open the printed URL once it finishes (default port 8080;
+# override via docker-compose.override.yml).
+
+set -euo pipefail
+
+cd "$(dirname "$0")/.."
+
+if [ ! -f .env ]; then
+    echo "→ No .env found; creating one from .env.dist. Add your sandbox key before testing live calls."
+    cp .env.dist .env
+fi
+
+docker compose up -d --build
+
+if [ ! -f vendor/autoload.php ]; then
+    echo "→ Installing Composer dependencies inside the container…"
+    docker compose exec -T comfino-backend-php composer install --no-interaction
+fi
+
+# Resolve the actual host port from Docker (honours docker-compose.override.yml).
+host_port="$(docker compose port comfino-backend-nginx 80 2>/dev/null | sed 's/.*://')"
+
+echo "→ Demo is up at http://localhost:${host_port:-8080}/"

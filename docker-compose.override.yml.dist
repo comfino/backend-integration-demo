@@ -1,0 +1,14 @@
+# Local Docker Compose overrides — copy to docker-compose.override.yml and edit.
+#
+#   cp docker-compose.override.yml.dist docker-compose.override.yml
+#
+# docker-compose.override.yml is loaded and merged automatically by `docker compose`,
+# so you never have to edit the tracked docker-compose.yml. It is git-ignored.
+#
+# The common case: change the host port the demo is served on (default 8080).
+
+services:
+    comfino-backend-nginx:
+        ports:
+            # host:container — change the host side (left) to any free port.
+            - "8080:80"
