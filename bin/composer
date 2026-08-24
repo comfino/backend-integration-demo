@@ -1,0 +1,11 @@
+#!/bin/bash
+#
+# Run Composer inside the PHP container (falls back to host composer if compose is unavailable).
+
+cd "$(dirname "$0")/.."
+
+if command -v docker > /dev/null && docker compose ps > /dev/null 2>&1; then
+    docker compose exec -T comfino-backend-php composer "$@"
+else
+    composer "$@"
+fi
